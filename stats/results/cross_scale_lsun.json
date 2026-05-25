@@ -1,0 +1,67 @@
+{
+  "scales": [
+    0.5,
+    2.0,
+    3.5,
+    5.0,
+    7.0
+  ],
+  "dataset": "lsun_bedroom",
+  "relative_effect_matrix": {
+    "0.5": {
+      "early": 0.176329,
+      "mid": 0.456395,
+      "late": 0.148795
+    },
+    "2.0": {
+      "early": 0.242205,
+      "mid": 0.544426,
+      "late": 0.294177
+    },
+    "3.5": {
+      "early": 0.378994,
+      "mid": 0.693196,
+      "late": 0.405336
+    },
+    "5.0": {
+      "early": 0.494033,
+      "mid": 0.77379,
+      "late": 0.500067
+    },
+    "7.0": {
+      "early": 0.608311,
+      "mid": 0.832395,
+      "late": 0.566242
+    }
+  },
+  "mid_bootstrap_ci_by_scale": {
+    "0.5": [
+      10.3729,
+      11.806
+    ],
+    "2.0": [
+      5.81897,
+      8.02079
+    ],
+    "3.5": [
+      3.27633,
+      5.40845
+    ],
+    "5.0": [
+      2.13188,
+      4.04111
+    ],
+    "7.0": [
+      1.39579,
+      3.23906
+    ]
+  },
+  "bonferroni_threshold_cross_scale": 0.0014285714285714286,
+  "per_scale_stats_paths": [
+    "stats/per_scale_0p5_lsun.json",
+    "stats/per_scale_2p0_lsun.json",
+    "stats/per_scale_3p5_lsun.json",
+    "stats/per_scale_5p0_lsun.json",
+    "stats/per_scale_7p0_lsun.json"
+  ]
+}

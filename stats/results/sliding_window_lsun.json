@@ -1,0 +1,110 @@
+{
+  "experiment": "wmg-sliding-window",
+  "dataset": "lsun_bedroom",
+  "scale": 3.5,
+  "n_seeds": 50,
+  "n_comparisons_vs_baseline": 8,
+  "bonferroni_threshold": 0.00625,
+  "baseline_mean": 11.978187,
+  "full_mean": 0.911732,
+  "window_width": 250,
+  "window_step": 125,
+  "conditions": {
+    "minority-full": {
+      "condition": "minority-full",
+      "t_start": 0,
+      "t_end": 1000,
+      "mean_confidence": 0.911732,
+      "delta_rel": 1.0,
+      "wilcoxon_W": 0.0,
+      "p_value": 0.0,
+      "significant_bonferroni": true,
+      "significant_p05": true,
+      "r_rb": 1.0
+    },
+    "slide_0": {
+      "condition": "slide_0",
+      "t_start": 0,
+      "t_end": 250,
+      "mean_confidence": 9.710632,
+      "delta_rel": 0.2049,
+      "wilcoxon_W": 0.0,
+      "p_value": 0.0,
+      "significant_bonferroni": true,
+      "significant_p05": true,
+      "r_rb": 1.0
+    },
+    "slide_1": {
+      "condition": "slide_1",
+      "t_start": 125,
+      "t_end": 375,
+      "mean_confidence": 6.994313,
+      "delta_rel": 0.4504,
+      "wilcoxon_W": 0.0,
+      "p_value": 0.0,
+      "significant_bonferroni": true,
+      "significant_p05": true,
+      "r_rb": 1.0
+    },
+    "slide_2": {
+      "condition": "slide_2",
+      "t_start": 250,
+      "t_end": 500,
+      "mean_confidence": 6.832508,
+      "delta_rel": 0.465,
+      "wilcoxon_W": 10.0,
+      "p_value": 0.0,
+      "significant_bonferroni": true,
+      "significant_p05": true,
+      "r_rb": 0.9843
+    },
+    "slide_3": {
+      "condition": "slide_3",
+      "t_start": 375,
+      "t_end": 625,
+      "mean_confidence": 6.050391,
+      "delta_rel": 0.5357,
+      "wilcoxon_W": 8.0,
+      "p_value": 0.0,
+      "significant_bonferroni": true,
+      "significant_p05": true,
+      "r_rb": 0.9875
+    },
+    "slide_4": {
+      "condition": "slide_4",
+      "t_start": 500,
+      "t_end": 750,
+      "mean_confidence": 6.566628,
+      "delta_rel": 0.489,
+      "wilcoxon_W": 101.0,
+      "p_value": 1e-08,
+      "significant_bonferroni": true,
+      "significant_p05": true,
+      "r_rb": 0.8416
+    },
+    "slide_5": {
+      "condition": "slide_5",
+      "t_start": 625,
+      "t_end": 875,
+      "mean_confidence": 7.322234,
+      "delta_rel": 0.4207,
+      "wilcoxon_W": 92.0,
+      "p_value": 0.0,
+      "significant_bonferroni": true,
+      "significant_p05": true,
+      "r_rb": 0.8557
+    },
+    "slide_6": {
+      "condition": "slide_6",
+      "t_start": 750,
+      "t_end": 1000,
+      "mean_confidence": 8.753529,
+      "delta_rel": 0.2914,
+      "wilcoxon_W": 154.0,
+      "p_value": 5.2e-07,
+      "significant_bonferroni": true,
+      "significant_p05": true,
+      "r_rb": 0.7584
+    }
+  }
+}

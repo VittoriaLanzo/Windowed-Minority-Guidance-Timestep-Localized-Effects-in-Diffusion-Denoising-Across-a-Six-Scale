@@ -1,0 +1,109 @@
+{
+  "scale": 2.0,
+  "dataset": "lsun_bedroom",
+  "n_seeds": 50,
+  "conditions": {
+    "baseline": {
+      "mean": 11.9782,
+      "std": 2.26258,
+      "cv": 0.188892,
+      "bootstrap_ci_95": [
+        11.3371,
+        12.5948
+      ]
+    },
+    "minority-early": {
+      "mean": 9.72319,
+      "std": 3.26714,
+      "cv": 0.336016,
+      "bootstrap_ci_95": [
+        8.79925,
+        10.6094
+      ],
+      "relative_effect": 0.242205,
+      "win_rate": 1.0,
+      "cohens_d": 0.802458
+    },
+    "minority-mid": {
+      "mean": 6.90942,
+      "std": 4.07712,
+      "cv": 0.590081,
+      "bootstrap_ci_95": [
+        5.81897,
+        8.02079
+      ],
+      "relative_effect": 0.544426,
+      "win_rate": 0.96,
+      "cohens_d": 1.53733
+    },
+    "minority-late": {
+      "mean": 9.23931,
+      "std": 3.38044,
+      "cv": 0.365876,
+      "bootstrap_ci_95": [
+        8.31504,
+        10.1509
+      ],
+      "relative_effect": 0.294177,
+      "win_rate": 0.74,
+      "cohens_d": 0.952208
+    },
+    "minority-full": {
+      "mean": 2.66788,
+      "std": 2.13084,
+      "cv": 0.7987,
+      "bootstrap_ci_95": [
+        2.10452,
+        3.26379
+      ],
+      "relative_effect": 1.0,
+      "win_rate": 1.0,
+      "cohens_d": 4.23639
+    }
+  },
+  "wilcoxon": {
+    "mid_vs_baseline": {
+      "W": 19.0,
+      "p": 5.45342e-13,
+      "r_rb": 0.970196,
+      "survives_bonferroni": true
+    },
+    "late_vs_baseline": {
+      "W": 187.0,
+      "p": 4.02859e-06,
+      "r_rb": 0.706667,
+      "survives_bonferroni": true
+    },
+    "early_vs_baseline": {
+      "W": 0.0,
+      "p": 1.77636e-15,
+      "r_rb": 1.0,
+      "survives_bonferroni": true
+    },
+    "full_vs_baseline": {
+      "W": 0.0,
+      "p": 1.77636e-15,
+      "r_rb": 1.0,
+      "survives_bonferroni": true
+    },
+    "mid_vs_late": {
+      "W": 249.0,
+      "p": 9.9154e-05,
+      "r_rb": 0.609412,
+      "survives_bonferroni": true
+    },
+    "late_vs_early": {
+      "W": 541.0,
+      "p": 0.357187,
+      "r_rb": 0.151373,
+      "survives_bonferroni": false
+    },
+    "full_vs_mid": {
+      "W": 87.0,
+      "p": 2.81309e-09,
+      "r_rb": 0.863529,
+      "survives_bonferroni": true
+    }
+  },
+  "bonferroni_threshold_per_scale": 0.0071428571428571435
+}

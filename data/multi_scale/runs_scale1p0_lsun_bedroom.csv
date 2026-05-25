@@ -1,0 +1,1 @@
+run_id,condition,guidance_window,t_start,t_end,guidance_scale,dataset,boundary_set,seed,n_generated,classifier_mean_confidence,classifier_mean_loss,runtime_seconds,artifact_path,timestamp
