@@ -1,11 +1,18 @@
 """
-Sliding-window experiment Wilcoxon + Bonferroni stats.
-Conditions: baseline, full, slide_0..slide_6
-Metric: classifier_mean_confidence (higher = more minority-class aligned)
-Reference: baseline (no guidance), upper bound: full (guidance t=[0,1000))
+Sliding-window Wilcoxon + Bonferroni statistics for WMG.
+
+Conditions: baseline, minority-full, slide_0 … slide_6
+Metric: classifier_mean_loss (lower = more minority-class aligned)
+Reference: baseline (no guidance)
+Upper bound: minority-full (guidance t=[0,1000))
+
+Usage (from repo root):
+    python stats/sliding_stats.py
+
+Output: stats/results/sliding_window_lsun.json
 """
 import sys
-sys.stdout.reconfigure(encoding='utf-8')
+sys.stdout.reconfigure(encoding="utf-8")
 
 import csv
 import json
@@ -13,127 +20,145 @@ import math
 from pathlib import Path
 from scipy.stats import wilcoxon
 
-CSV = r"C:\Users\Vittoria\AppData\Local\Temp\wmg-sliding-output\minority-guidance\data\experiment_runs.csv"
+# ── portable paths ────────────────────────────────────────────────────────────
+REPO_ROOT = Path(__file__).resolve().parent.parent
+CSV_PATH  = REPO_ROOT / "data" / "sliding_window" / "runs_sliding_window_lsun.csv"
+OUT_PATH  = Path(__file__).resolve().parent / "results" / "sliding_window_lsun.json"
 
-# ── Load data ────────────────────────────────────────────────────────────────
-runs = {}  # condition -> {seed: confidence}
-with open(CSV, newline='', encoding='utf-8') as f:
+# ── window boundaries (t_start, t_end) ────────────────────────────────────────
+WINDOWS = {
+    "slide_0":       (0,    250),
+    "slide_1":       (125,  375),
+    "slide_2":       (250,  500),
+    "slide_3":       (375,  625),
+    "slide_4":       (500,  750),
+    "slide_5":       (625,  875),
+    "slide_6":       (750, 1000),
+    "minority-full": (0,   1000),
+}
+
+ALPHA = 0.05
+
+
+def sig6(x):
+    """Round to 6 significant figures."""
+    if x == 0.0:
+        return 0.0
+    mag = math.floor(math.log10(abs(x)))
+    fac = 10 ** (5 - mag)
+    return round(x * fac) / fac
+
+
+# ── Load CSV ──────────────────────────────────────────────────────────────────
+runs: dict[str, dict[int, float]] = {}
+with open(CSV_PATH, newline="", encoding="utf-8") as f:
     for row in csv.DictReader(f):
-        cond  = row['condition']
-        seed  = int(row['seed'])
-        conf  = float(row['classifier_mean_loss'])
-        runs.setdefault(cond, {})[seed] = conf
+        cond = row["condition"]
+        seed = int(row["seed"])
+        # accept either column name
+        loss = float(row.get("classifier_mean_loss") or row["mean_loss"])
+        runs.setdefault(cond, {})[seed] = loss
 
 conditions = sorted(runs.keys())
-seeds = sorted(runs['baseline'].keys())
-n = len(seeds)
-print(f"Conditions: {conditions}")
-print(f"Seeds: {n}  (seed range {seeds[0]}–{seeds[-1]})")
+seeds      = sorted(runs["baseline"].keys())
+n          = len(seeds)
 
-# Verify all conditions have all seeds
+print(f"Conditions : {conditions}")
+print(f"Seeds      : {n}  (range {seeds[0]}–{seeds[-1]})")
+
+# Sanity check: all conditions have all seeds
 for c in conditions:
     missing = set(seeds) - set(runs[c].keys())
     if missing:
         print(f"WARNING: {c} missing seeds {missing}")
 
-# ── Per-condition paired arrays (aligned by seed) ────────────────────────────
-baseline_vals = [runs['baseline'][s] for s in seeds]
-full_vals     = [runs['minority-full'][s] for s in seeds]
+# ── Aligned arrays ────────────────────────────────────────────────────────────
+baseline_vals = [runs["baseline"][s]       for s in seeds]
+full_vals     = [runs["minority-full"][s]  for s in seeds]
 
 baseline_mean = sum(baseline_vals) / n
 full_mean     = sum(full_vals)     / n
 
-print(f"\nbaseline  mean={baseline_mean:.6f}")
-print(f"minority-full mean={full_mean:.6f}   Δrel=1.000 (definition)")
+print(f"\nbaseline      mean = {baseline_mean:.6f}")
+print(f"minority-full mean = {full_mean:.6f}   Δrel = 1.000 (definition)")
 
-# ── Wilcoxon + stats for each condition vs baseline ──────────────────────────
-# Non-baseline conditions (slide_0..slide_6 + full)
-test_conditions = [c for c in conditions if c != 'baseline']
-# fix condition key for full (CSV uses 'minority-full')
-n_comparisons = len(test_conditions)   # 7 slides + full = 8
-alpha = 0.05
-bonferroni_threshold = alpha / n_comparisons
+# ── Wilcoxon tests ────────────────────────────────────────────────────────────
+test_conditions    = [c for c in conditions if c != "baseline"]
+n_comparisons      = len(test_conditions)   # 7 slides + full = 8
+bonferroni_thresh  = ALPHA / n_comparisons
 
-print(f"\nBonferroni threshold: α/{n_comparisons} = {bonferroni_threshold:.5f}")
-print(f"  (α=0.05, {n_comparisons} comparisons vs baseline)\n")
+print(f"\nBonferroni threshold: α/{n_comparisons} = {bonferroni_thresh:.5f}")
+print(f"  (α={ALPHA}, {n_comparisons} comparisons vs baseline)\n")
+
+header = (
+    f"{'Condition':<14} {'t_start':>7} {'t_end':>6}"
+    f"  {'mean':>9}  {'Δrel':>6}  {'W':>8}  {'p':>10}  sig  {'r_rb':>6}"
+)
+print(header)
+print("-" * len(header))
 
 results = {}
-print(f"{'Condition':<14} {'t_start':>7} {'t_end':>6}  {'mean':>8}  {'Δrel':>6}  {'W':>8}  {'p':>10}  sig  {'r_rb':>6}")
-print("-"*85)
-
-# Slide window ranges from the CSV
-WINDOWS = {
-    'slide_0': (0,   250),
-    'slide_1': (125, 375),
-    'slide_2': (250, 500),
-    'slide_3': (375, 625),
-    'slide_4': (500, 750),
-    'slide_5': (625, 875),
-    'slide_6': (750, 1000),
-    'minority-full': (0, 1000),
-}
-
-for cond in test_conditions:
-    vals = [runs[cond][s] for s in seeds]
+for cond in sorted(test_conditions):
+    vals   = [runs[cond][s] for s in seeds]
     mean_v = sum(vals) / n
 
-    # Relative effect: lower loss is better; matches original per_scale JSON formula
-    # Δrel = (baseline_loss - cond_loss) / (baseline_loss - full_loss)
+    # Δrel: (baseline_loss − cond_loss) / (baseline_loss − full_loss)
     delta_rel = (baseline_mean - mean_v) / (baseline_mean - full_mean)
 
-    # Wilcoxon signed-rank (cond vs baseline, paired per seed)
-    # Positive diff = baseline > cond (desired: cond has lower loss)
+    # Paired Wilcoxon (positive diff = cond has lower loss than baseline)
     diffs = [baseline_vals[i] - vals[i] for i in range(n)]
-    stat, p = wilcoxon(diffs, zero_method='zsplit')
+    stat, p = wilcoxon(diffs, zero_method="zsplit")
 
-    # Rank-biserial correlation
-    n_pairs = n
-    r_rb = 1 - 2 * stat / (n_pairs * (n_pairs + 1) / 2)
-
-    sig = "***" if p < bonferroni_threshold else ("*" if p < 0.05 else "   ")
+    W    = float(stat)
+    p    = float(p)
+    r_rb = 1.0 - 2.0 * W / (n * (n + 1) / 2)
+    sig  = "***" if p < bonferroni_thresh else ("*" if p < 0.05 else "   ")
 
     t_start, t_end = WINDOWS.get(cond, (0, 0))
-    print(f"{cond:<14} {t_start:>7} {t_end:>6}  {mean_v:>8.5f}  {delta_rel:>6.3f}  {stat:>8.1f}  {p:>10.6f}  {sig}  {r_rb:>6.3f}")
+    print(
+        f"{cond:<14} {t_start:>7} {t_end:>6}"
+        f"  {mean_v:>9.5f}  {delta_rel:>6.3f}"
+        f"  {W:>8.1f}  {p:>10.2e}  {sig}  {r_rb:>6.3f}"
+    )
 
     results[cond] = {
-        'condition': cond,
-        't_start': t_start,
-        't_end': t_end,
-        'mean_confidence': round(mean_v, 6),
-        'delta_rel': round(delta_rel, 4),
-        'wilcoxon_W': stat,
-        'p_value': round(p, 8),
-        'significant_bonferroni': bool(p < bonferroni_threshold),
-        'significant_p05': bool(p < 0.05),
-        'r_rb': round(r_rb, 4),
+        "condition":               cond,
+        "t_start":                 t_start,
+        "t_end":                   t_end,
+        "mean_loss":               sig6(mean_v),
+        "delta_rel":               sig6(delta_rel),
+        "W":                       sig6(W),
+        "p":                       sig6(p),
+        "r_rb":                    sig6(r_rb),
+        "significant_bonferroni":  bool(p < bonferroni_thresh),
     }
 
-print("\nbaseline mean =", round(baseline_mean, 6))
-print("full     mean =", round(full_mean, 6))
-
-# ── Peak window detection ─────────────────────────────────────────────────────
-slide_only = {k: v for k, v in results.items() if k.startswith('slide_')}
-peak_cond = min(slide_only, key=lambda c: slide_only[c]['mean_confidence'])  # lower loss = better
-print(f"\nPeak slide window: {peak_cond} "
-      f"(t=[{results[peak_cond]['t_start']},{results[peak_cond]['t_end']}), "
-      f"mean={results[peak_cond]['mean_confidence']:.5f}, "
-      f"Δrel={results[peak_cond]['delta_rel']:.3f})")
+# ── Peak detection ────────────────────────────────────────────────────────────
+slide_only = {k: v for k, v in results.items() if k.startswith("slide_")}
+peak_cond  = min(slide_only, key=lambda c: slide_only[c]["mean_loss"])
+print(
+    f"\nPeak: {peak_cond} "
+    f"t=[{results[peak_cond]['t_start']},{results[peak_cond]['t_end']})"
+    f"  Δrel={results[peak_cond]['delta_rel']:.4f}"
+    f"  W={results[peak_cond]['W']}"
+    f"  p={results[peak_cond]['p']:.2e}"
+)
 
 # ── Save JSON ─────────────────────────────────────────────────────────────────
-OUT = r"C:\Users\Vittoria\Desktop\windowed-minority-guidance\stats\sliding_window_lsun.json"
-out = {
-    'experiment': 'wmg-sliding-window',
-    'dataset': 'lsun_bedroom',
-    'scale': 3.5,
-    'n_seeds': n,
-    'n_comparisons_vs_baseline': n_comparisons,
-    'bonferroni_threshold': round(bonferroni_threshold, 6),
-    'baseline_mean': round(baseline_mean, 6),
-    'full_mean': round(full_mean, 6),
-    'window_width': 250,
-    'window_step': 125,
-    'conditions': results,
+OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
+out_doc = {
+    "experiment":                  "wmg-sliding-window",
+    "dataset":                     "lsun_bedroom",
+    "scale":                       3.5,
+    "n_seeds":                     n,
+    "window_width":                250,
+    "window_step":                 125,
+    "n_comparisons_vs_baseline":   n_comparisons,
+    "bonferroni_threshold":        sig6(bonferroni_thresh),
+    "baseline_mean":               sig6(baseline_mean),
+    "full_mean":                   sig6(full_mean),
+    "conditions":                  results,
 }
-with open(OUT, 'w', encoding='utf-8') as f:
-    json.dump(out, f, indent=2)
-print(f"\nSaved to {OUT}")
+with open(OUT_PATH, "w", encoding="utf-8") as fh:
+    json.dump(out_doc, fh, indent=2)
+print(f"\nSaved → {OUT_PATH}")
