@@ -22,7 +22,8 @@
       ],
       "relative_effect": 0.176329,
       "win_rate": 1.0,
-      "cohens_d": 0.144895
+      "cohens_d": 0.144895,
+      "cohens_dz": 1.02041
     },
     "minority-mid": {
       "mean": 11.0971,
@@ -34,7 +35,8 @@
       ],
       "relative_effect": 0.456395,
       "win_rate": 0.78,
-      "cohens_d": 0.361499
+      "cohens_d": 0.361499,
+      "cohens_dz": 0.727404
     },
     "minority-late": {
       "mean": 11.6909,
@@ -46,7 +48,8 @@
       ],
       "relative_effect": 0.148795,
       "win_rate": 0.62,
-      "cohens_d": 0.124077
+      "cohens_d": 0.124077,
+      "cohens_dz": 0.128098
     },
     "minority-full": {
       "mean": 10.0476,
@@ -58,7 +61,8 @@
       ],
       "relative_effect": 1.0,
       "win_rate": 0.74,
-      "cohens_d": 0.68795
+      "cohens_d": 0.68795,
+      "cohens_dz": 0.611351
     }
   },
   "wilcoxon": {

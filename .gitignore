@@ -5,3 +5,6 @@ __pycache__/
 .DS_Store
 *.egg-info/
 .env
+audit_r6.py
+stats/results/AUDIT_REPORT_r6.md
+stats/results/audit_result.json

@@ -1,0 +1,42 @@
+{
+  "scale": 1.0,
+  "dataset": "lsun_bedroom",
+  "metric": "classifier_mean_confidence",
+  "conditions": {
+    "baseline": {
+      "n": 50,
+      "mean": 0.0001762467150432201,
+      "median": 6.198740265972447e-06,
+      "mean_over_median_ratio": 28.43266655496346,
+      "ratio_rounded": 28
+    },
+    "minority-early": {
+      "n": 50,
+      "mean": 0.0007642280359704045,
+      "median": 1.3220991604612209e-05,
+      "mean_over_median_ratio": 57.804138965174126,
+      "ratio_rounded": 58
+    },
+    "minority-mid": {
+      "n": 50,
+      "mean": 0.0032420185103188715,
+      "median": 7.017472671577707e-05,
+      "mean_over_median_ratio": 46.19923243092563,
+      "ratio_rounded": 46
+    },
+    "minority-late": {
+      "n": 50,
+      "mean": 0.002097048941683255,
+      "median": 1.3643975307786604e-05,
+      "mean_over_median_ratio": 153.69779660085365,
+      "ratio_rounded": 154
+    },
+    "minority-full": {
+      "n": 50,
+      "mean": 0.08225316083346967,
+      "median": 0.0007633944042026997,
+      "mean_over_median_ratio": 107.74661221073016,
+      "ratio_rounded": 108
+    }
+  }
+}

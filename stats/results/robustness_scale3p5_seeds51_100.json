@@ -1,68 +1,69 @@
 {
-  "scale": 7.0,
+  "experiment": "wmg-robustness-replication",
+  "scale": 3.5,
   "dataset": "lsun_bedroom",
+  "seed_range": [
+    51,
+    100
+  ],
   "n_seeds": 50,
   "conditions": {
     "baseline": {
-      "mean": 11.9782,
-      "std": 2.26258,
-      "cv": 0.188892,
+      "mean": 12.7592,
+      "std": 2.68936,
+      "cv": 0.210779,
       "bootstrap_ci_95": [
-        11.3371,
-        12.5948
+        11.9757,
+        13.4489
       ]
     },
     "minority-early": {
-      "mean": 4.86288,
-      "std": 3.60616,
-      "cv": 0.741569,
+      "mean": 8.83148,
+      "std": 4.31895,
+      "cv": 0.489041,
       "bootstrap_ci_95": [
-        3.92138,
-        5.90871
+        7.64749,
+        9.99465
       ],
-      "relative_effect": 0.608311,
+      "relative_effect": 0.33367,
       "win_rate": 1.0,
-      "cohens_d": 2.36366,
-      "cohens_dz": 1.9313
+      "cohens_d": 1.09174
     },
     "minority-mid": {
-      "mean": 2.24183,
-      "std": 3.34982,
-      "cv": 1.49424,
+      "mean": 4.59655,
+      "std": 3.84602,
+      "cv": 0.836718,
       "bootstrap_ci_95": [
-        1.39579,
-        3.23906
+        3.57031,
+        5.66595
       ],
-      "relative_effect": 0.832395,
+      "relative_effect": 0.693443,
       "win_rate": 1.0,
-      "cohens_d": 3.40626,
-      "cohens_dz": 2.53029
+      "cohens_d": 2.45975
     },
     "minority-late": {
-      "mean": 5.35497,
-      "std": 3.74299,
-      "cv": 0.698976,
+      "mean": 6.9696,
+      "std": 4.26793,
+      "cv": 0.612363,
       "bootstrap_ci_95": [
-        4.35025,
-        6.39051
+        5.77722,
+        8.15839
       ],
-      "relative_effect": 0.566242,
-      "win_rate": 0.92,
-      "cohens_d": 2.14158,
-      "cohens_dz": 1.44529
+      "relative_effect": 0.491843,
+      "win_rate": 0.88,
+      "cohens_d": 1.62306
     },
     "minority-full": {
-      "mean": 0.281378,
-      "std": 0.29362,
-      "cv": 1.04351,
+      "mean": 0.988017,
+      "std": 1.04879,
+      "cv": 1.06151,
       "bootstrap_ci_95": [
-        0.206862,
-        0.367254
+        0.716032,
+        1.29267
       ],
       "relative_effect": 1.0,
       "win_rate": 1.0,
-      "cohens_d": 7.25022,
-      "cohens_dz": 4.98243
+      "cohens_d": 5.76691
     }
   },
   "wilcoxon": {
@@ -73,9 +74,9 @@
       "survives_bonferroni": true
     },
     "late_vs_baseline": {
-      "W": 20.0,
-      "p": 6.59028e-13,
-      "r_rb": 0.968627,
+      "W": 65.0,
+      "p": 3.13456e-10,
+      "r_rb": 0.898039,
       "survives_bonferroni": true
     },
     "early_vs_baseline": {
@@ -91,21 +92,21 @@
       "survives_bonferroni": true
     },
     "mid_vs_late": {
-      "W": 209.0,
-      "p": 1.36759e-05,
-      "r_rb": 0.672157,
+      "W": 354.0,
+      "p": 0.00557949,
+      "r_rb": 0.444706,
       "survives_bonferroni": true
     },
     "late_vs_early": {
-      "W": 555.0,
-      "p": 0.431911,
-      "r_rb": 0.129412,
+      "W": 430.0,
+      "p": 0.0450275,
+      "r_rb": 0.32549,
       "survives_bonferroni": false
     },
     "full_vs_mid": {
-      "W": 30.0,
-      "p": 3.61489e-12,
-      "r_rb": 0.952941,
+      "W": 91.0,
+      "p": 4.0575e-09,
+      "r_rb": 0.857255,
       "survives_bonferroni": true
     }
   },

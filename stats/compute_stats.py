@@ -126,6 +126,15 @@ def cohens_d(baseline_arr, cond_arr):
     return float((np.mean(baseline_arr) - np.mean(cond_arr)) / pooled_std)
 
 
+def cohens_dz(baseline_arr, cond_arr):
+    """Paired Cohen's d_z = mean(diffs) / std(diffs, ddof=1)."""
+    diffs = baseline_arr - cond_arr
+    sd = float(np.std(diffs, ddof=1))
+    if sd == 0:
+        return 0.0
+    return float(np.mean(diffs) / sd)
+
+
 def wilcoxon_test(a, b, threshold):
     """
     Paired Wilcoxon signed-rank test on (a - b).
@@ -188,9 +197,11 @@ def compute_per_scale(scale_cfg):
             rel_eff  = float((baseline_mean - mean_val) / denom_full) if denom_full else float("nan")
             win_rate = float(np.mean(arr < losses["baseline"]))
             d        = cohens_d(losses["baseline"], arr)
+            dz       = cohens_dz(losses["baseline"], arr)
             entry["relative_effect"] = sig6(rel_eff)
             entry["win_rate"]        = sig6(win_rate)
             entry["cohens_d"]        = sig6(d)
+            entry["cohens_dz"]       = sig6(dz)
 
         conditions_out[cond] = entry
 

@@ -1,6 +1,7 @@
 {
   "scales": [
     0.5,
+    1.0,
     2.0,
     3.5,
     5.0,
@@ -11,33 +12,48 @@
     "0.5": {
       "early": 0.176329,
       "mid": 0.456395,
-      "late": 0.148795
+      "late": 0.148795,
+      "full": 1.0
+    },
+    "1.0": {
+      "early": 0.16213,
+      "mid": 0.455836,
+      "late": 0.24079,
+      "full": 1.0
     },
     "2.0": {
       "early": 0.242205,
       "mid": 0.544426,
-      "late": 0.294177
+      "late": 0.294177,
+      "full": 1.0
     },
     "3.5": {
       "early": 0.378994,
       "mid": 0.693196,
-      "late": 0.405336
+      "late": 0.405336,
+      "full": 1.0
     },
     "5.0": {
       "early": 0.494033,
       "mid": 0.77379,
-      "late": 0.500067
+      "late": 0.500067,
+      "full": 1.0
     },
     "7.0": {
       "early": 0.608311,
       "mid": 0.832395,
-      "late": 0.566242
+      "late": 0.566242,
+      "full": 1.0
     }
   },
   "mid_bootstrap_ci_by_scale": {
     "0.5": [
       10.3729,
       11.806
+    ],
+    "1.0": [
+      8.67485,
+      10.4974
     ],
     "2.0": [
       5.81897,
@@ -56,12 +72,13 @@
       3.23906
     ]
   },
-  "bonferroni_threshold_cross_scale": 0.0014285714285714286,
+  "bonferroni_threshold_cross_scale": 0.0011904761904761906,
   "per_scale_stats_paths": [
-    "stats/per_scale_0p5_lsun.json",
-    "stats/per_scale_2p0_lsun.json",
-    "stats/per_scale_3p5_lsun.json",
-    "stats/per_scale_5p0_lsun.json",
-    "stats/per_scale_7p0_lsun.json"
+    "stats/results/per_scale_0p5_lsun.json",
+    "stats/results/per_scale_1p0_lsun.json",
+    "stats/results/per_scale_2p0_lsun.json",
+    "stats/results/per_scale_3p5_lsun.json",
+    "stats/results/per_scale_5p0_lsun.json",
+    "stats/results/per_scale_7p0_lsun.json"
   ]
 }
