@@ -1,4 +1,4 @@
-#Windowed Minority Guidance: Timesteps localized effects in diffusion denoising 
+Windowed Minority Guidance: Timesteps localized effects in diffusion denoising 
 
 **Vittoria Lanzo** · Independent Researcher
 
