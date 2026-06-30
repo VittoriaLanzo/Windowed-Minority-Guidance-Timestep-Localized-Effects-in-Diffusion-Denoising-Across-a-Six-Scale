@@ -1,4 +1,4 @@
-# Windowed Minority Guidance: Scale Sweep and Temporal Localization
+#Windowed Minority Guidance: Timesteps localized effects in diffusion denoising 
 
 **Vittoria Lanzo** · Independent Researcher
 
